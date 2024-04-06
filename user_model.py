@@ -1,4 +1,4 @@
-from pydentic import BaseModel
+from pydantic import BaseModel
 from datetime import datetime
 from typing import List
 
@@ -14,4 +14,22 @@ class User(BaseModel):
     id: int
     login: str
     balance: int
-    actions: List[UserAction]
+
+class UserBase(BaseModel):
+    login: str
+
+class UserCreate(UserBase):
+    password: str
+
+class UserLogin(UserBase):
+    password: str
+
+class ActionBase(BaseModel):
+    input_text: str
+    output_text: str
+    cost: int
+
+class PredictionRequest(BaseModel):
+    input_text: str
+    min_len: int
+    max_len: int
