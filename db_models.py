@@ -105,6 +105,18 @@ class User(Base):
             return history
         except NoResultFound:
             return []
+    
+    @classmethod
+    def get_or_create(cls, session, user_id: int) -> 'User':
+        """Get the user from the database based on user_id, or create a new one if it doesn't exist"""
+        try:
+            user = session.query(cls).filter_by(login=str(user_id)).one()
+            return user, False
+        except NoResultFound:
+            user = cls(login=str(user_id), balance=0)
+            session.add(user)
+            session.commit()
+            return user, True
 
 
 if __name__ == "__main__":
