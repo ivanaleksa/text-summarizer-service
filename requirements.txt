@@ -9,3 +9,4 @@ fastapi
 uvicorn
 pyjwt
 aiogram
+pika

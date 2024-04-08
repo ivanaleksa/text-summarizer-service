@@ -2,11 +2,14 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.utils import executor
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+import json
+import asyncio
+import aio_pika
 
 from db_models import User
-from nn_model import Model as SummarizeModel
 from typing import List
 from user_model import UserAction
+from rabbitmq_publisher import send_message
 
 from credentials_local import creds
 
@@ -15,8 +18,6 @@ dp = Dispatcher(bot)
 
 engine = create_engine(creds["db_url"])
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-PREDICTION_MODEL: SummarizeModel = SummarizeModel()
 
 
 @dp.message_handler(commands=['start'])
@@ -35,16 +36,13 @@ async def make_prediction(message: types.Message):
     input_text = message.text.split(' ', 1)[1]
 
     db = SessionLocal()
-    user, created = User.get_or_create(db, user_id=message.from_user.id)
+    user, _ = User.get_or_create(db, user_id=message.from_user.id)
     
     if (len(input_text) > user.balance):
         await message.answer(f"У вас не достаточно средств ({user.balance}) для выполнения данного действия. Необходимо {len(input_text)}")
     else:
-        global PREDICTION_MODEL
-        predict = PREDICTION_MODEL.make_prediction(input_text, min_len=10, max_len=1000)[0]["summary_text"]
-        user.make_action(db, input_text, predict)
-        await message.answer(predict)
-        await message.answer(f"Ваш баланс был уменьшен на {len(input_text)}")
+        send_message(input_text, message.from_user.id)
+        await message.answer("Запрос отправлен.")
 
 @dp.message_handler(commands=['balance'])
 async def get_balance(message: types.Message):
@@ -71,7 +69,7 @@ async def increase_balance(message: types.Message):
 @dp.message_handler(commands=['history'])
 async def get_history(message: types.Message):
     db = SessionLocal()
-    user, created = User.get_or_create(db, user_id=message.from_user.id)
+    user, _ = User.get_or_create(db, user_id=message.from_user.id)
 
     history: List[UserAction] = user.get_history(db)
 
@@ -81,5 +79,37 @@ async def get_history(message: types.Message):
 
     await message.answer(res, parse_mode=types.ParseMode.MARKDOWN)
 
+
+async def consume_results():
+    connection = await aio_pika.connect_robust(
+        "amqp://user:123@localhost/",
+        heartbeat=30
+    )
+
+    async with connection:
+        channel = await connection.channel()
+
+        result_queue = await channel.declare_queue('result_queue')
+
+        async for message in result_queue:
+            async with message.process():
+                result = json.loads(message.body)
+
+                predict_text = result["result"]
+                user_id = result["user_id"]
+
+                db = SessionLocal()
+                user, _ = User.get_or_create(db, user_id=user_id)
+
+                await bot.send_message(user_id, predict_text)
+                await bot.send_message(user_id, f"Ваш баланс был уменьшен на {len(predict_text)}")
+                user.make_action(db, result["input_text"], predict_text)
+
+async def main():
+    pooling_task = asyncio.create_task(dp.start_polling())
+    consume_task = asyncio.create_task(consume_results())
+
+    await asyncio.gather(pooling_task, consume_task)
+
 if __name__ == '__main__':
-    executor.start_polling(dp, skip_updates=True)
+    asyncio.run(main())
