@@ -9,9 +9,9 @@ import hashlib
 from datetime import datetime, timedelta
 import jwt
 
-from db_models import User
-from nn_model import Model as SummarizeModel
-from user_model import User as ValidationUser, UserCreate, UserLogin, ActionBase, PredictionRequest
+from models.db_models import User
+from models.nn_model import Model as SummarizeModel
+from models.user_model import User as ValidationUser, UserCreate, UserLogin, ActionBase, PredictionRequest
 
 from credentials_local import creds
 

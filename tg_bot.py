@@ -6,10 +6,10 @@ import json
 import asyncio
 import aio_pika
 
-from db_models import User
+from models.db_models import User
 from typing import List
-from user_model import UserAction
-from rabbitmq_publisher import send_message
+from models.user_model import UserAction
+from rabbitmq_scripts.rabbitmq_publisher import send_message
 
 from credentials_local import creds
 

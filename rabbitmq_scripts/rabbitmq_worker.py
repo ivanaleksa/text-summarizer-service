@@ -1,6 +1,7 @@
 import pika
 import json
-from nn_model import Model as SummarizeModel
+from ..models.nn_model import Model as SummarizeModel
+
 
 def callback(ch, method, properties, body):
     parameters = json.loads(body)
