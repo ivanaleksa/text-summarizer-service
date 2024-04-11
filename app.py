@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException, Depends, Security
 from fastapi.concurrency import asynccontextmanager
 from fastapi.security import OAuth2PasswordBearer
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -32,6 +33,14 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
+origins = ["*"] 
+app.add_middleware(
+    CORSMiddleware, 
+    allow_origins=origins, 
+    allow_credentials=True, 
+    allow_methods=["*"], 
+    allow_headers=["*"],
+)
 
 def get_db():
     db = SessionLocal()
