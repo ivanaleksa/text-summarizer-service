@@ -1,0 +1,10 @@
+#prediction_text
+{
+    height: 200px;
+}
+
+.prediction_area
+{
+    margin-bottom: 10px;
+    display: flex;
+}

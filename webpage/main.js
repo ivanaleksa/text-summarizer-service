@@ -146,3 +146,29 @@ function increase_balance()
         }
     });
 }
+
+function prediction()
+{
+    const data = {
+        input_text: document.getElementById("prediction_text").value,
+        min_len: parseInt(document.getElementById("min_len").value),
+        max_len: parseInt(document.getElementById("max_len").value)
+    };
+
+    fetch(BACK_URL + "predict/", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (response.status == 401) {
+            window.location.replace(FRONT_URL + "log_in.html");
+        } else {
+            alert("Your request was sent for processing. As soon as it is ready it will appear in the history table");
+            window.location.reload();
+        }
+    });
+}
