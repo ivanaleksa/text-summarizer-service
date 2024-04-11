@@ -106,6 +106,8 @@ function personal_account()
         headers.forEach(headerText => {
             const header = document.createElement("th");
             header.textContent = headerText;
+            header.style.border = "3px solid #245488";
+            header.style.borderCollapse = "collapse";
             headerRow.appendChild(header);
         });
         
@@ -115,7 +117,12 @@ function personal_account()
             const cellInputText = row.insertCell();
             const cellOutputText = row.insertCell();
             const cellCost = row.insertCell();
-            
+            cellInputText.style.border = "3px solid #245488";
+            cellInputText.style.borderCollapse = "collapse";
+            cellOutputText.style.border = "3px solid #245488";
+            cellOutputText.style.borderCollapse = "collapse";
+            cellCost.style.border = "3px solid #245488";
+            cellCost.style.borderCollapse = "collapse";
             cellInputText.textContent = transaction.input_text;
             cellOutputText.textContent = transaction.output_text;
             cellCost.textContent = transaction.cost;

@@ -1,6 +1,7 @@
 #prediction_text
 {
     height: 200px;
+    flex: 1;
 }
 
 .prediction_area
