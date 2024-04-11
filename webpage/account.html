@@ -7,7 +7,18 @@
     <script src="main.js"></script>
     <title>Account</title>
 </head>
-    <body>
-        <p>Hello! This is you personal account!</p>
-    </body>
+<body>
+    <div>
+        <button onclick="logout();">Log out</button>
+    </div>
+    <p>Hello, <span id="user_login"></span></p>
+    <p>Your balance: <b><span id="user_balance"></span></b> coins.</p>
+    <div>
+        <label for="increase"></label>
+        <input type="text" id="increase" name="increase" style="margin-bottom: 10px;" />
+        <button onclick="increase_balance();">Increase balance</button>
+    </div>
+    <div id="transaction_history"></div>
+    <script>personal_account()</script>
+</body>
 </html>

@@ -2,7 +2,7 @@ const BACK_URL = "http://127.0.0.1:8000/";
 const FRONT_URL = "http://127.0.0.1:8543/";
 
 function log_in_redirect(type) {
-    fetch(BACK_URL + "get_user", {
+    fetch(BACK_URL + "get_user/", {
         method: "GET",
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -20,6 +20,12 @@ function log_in_redirect(type) {
     });
 }
 
+function logout()
+{
+    localStorage.removeItem("token");
+    window.location.replace(FRONT_URL + "/");
+}
+
 function login_submit(type) {
     const data = {
         login: document.getElementById("login").value,
@@ -34,7 +40,7 @@ function login_submit(type) {
         body: JSON.stringify(data)
     };
     
-    fetch(BACK_URL + ((type === 1) ? "register" : "login"), options)
+    fetch(BACK_URL + ((type === 1) ? "register/" : "login/"), options)
         .then(response => {
             if (!response.ok) {
                 alert("You entered wrong data");
@@ -51,3 +57,92 @@ function login_submit(type) {
         });
 }
 
+function personal_account()
+{
+    fetch(BACK_URL + "get_user/", {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+    })
+    .then(response => {
+        if (response.status == 401) {
+            window.location.replace(FRONT_URL + "log_in.html");
+        } else {
+            return response.json();
+        }
+    })
+    .then(user_data => {
+        document.getElementById("user_login").appendChild(document.createTextNode(user_data["login"]));
+        document.getElementById("user_balance").appendChild(document.createTextNode(user_data["balance"]));
+    })
+    .catch(error => {
+        console.error('There was a problem with your fetch operation:', error);
+    });
+
+
+    fetch(BACK_URL + "history/", {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+    })
+    .then(response => {
+        if (response.status == 401) {
+            window.location.replace(FRONT_URL + "log_in.html");
+        } else {
+            return response.json();
+        }
+    })
+    .then(transaction_data => {
+        // Создание таблицы и заполнение данными
+        const table = document.createElement("table");
+        table.style.border = "3px solid #245488";
+        table.style.borderCollapse = "collapse";
+        const headerRow = table.insertRow();
+        const headers = ["Input Text", "Output Text", "Cost"];
+        
+        // Создание заголовков столбцов
+        headers.forEach(headerText => {
+            const header = document.createElement("th");
+            header.textContent = headerText;
+            headerRow.appendChild(header);
+        });
+        
+        // Заполнение данными
+        transaction_data.forEach(transaction => {
+            const row = table.insertRow();
+            const cellInputText = row.insertCell();
+            const cellOutputText = row.insertCell();
+            const cellCost = row.insertCell();
+            
+            cellInputText.textContent = transaction.input_text;
+            cellOutputText.textContent = transaction.output_text;
+            cellCost.textContent = transaction.cost;
+        });
+        
+        document.getElementById("transaction_history").appendChild(table);
+    })
+    .catch(error => {
+        console.error('There was a problem with your fetch operation:', error);
+    });
+}
+
+function increase_balance()
+{
+    let amount = document.getElementById("increase").value;
+
+    fetch(BACK_URL + `balance/increase?amount=${amount}`, {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+    })
+    .then(response => {
+        if (response.status == 401) {
+            window.location.replace(FRONT_URL + "log_in.html");
+        } else {
+            window.location.reload();
+        }
+    });
+}
