@@ -1,11 +1,10 @@
 from sqlalchemy import create_engine, Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.orm import relationship, sessionmaker, Session
+from sqlalchemy.orm import relationship
 from typing import List
 import sqlalchemy
 import hashlib
 from datetime import datetime
-from credentials_local import creds
 
 
 Base = sqlalchemy.orm.declarative_base()
@@ -105,21 +104,15 @@ class User(Base):
             return history
         except NoResultFound:
             return []
-
-
-if __name__ == "__main__":
-    engine = create_engine(creds["db_url"])
-    Base.metadata.create_all(engine)
-    Session = sessionmaker(bind=engine)
-
-    # Test
-    session = Session()
-
-    new_user = User.register(session, login="ivanaleksa", password="123")
     
-    new_user.increase_balance(session, 100)
-    new_user.make_action(session, "I want summarize!", "Here it is!")
-    print(new_user.get_history(session))
-    print(new_user.check_balance_sufficient(50))
-
-    session.close()
+    @classmethod
+    def get_or_create(cls, session, user_id: int) -> 'User':
+        """Get the user from the database based on user_id, or create a new one if it doesn't exist"""
+        try:
+            user = session.query(cls).filter_by(login=str(user_id)).one()
+            return user, False
+        except NoResultFound:
+            user = cls(login=str(user_id), balance=0)
+            session.add(user)
+            session.commit()
+            return user, True

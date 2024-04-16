@@ -1,0 +1,119 @@
+#prediction_text
+{
+    height: 200px;
+    flex: 1;
+}
+
+.prediction_area
+{
+    margin-bottom: 10px;
+    display: flex;
+}
+
+body { 
+    background: linear-gradient(#e6e6fa, #6f708e) fixed;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+.unentered {
+    width: 70%;
+    margin: auto;
+    min-height: 100vh;
+    background: #fff;
+    text-align: center;
+}
+
+.login_btn, .registrate_btn {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 10px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+.login_btn:hover, .registrate_btn:hover {
+    background-color: #45a049;
+}
+
+.welcome_text {
+    text-align: center;
+}
+
+.submit_btn, .log_out_btn {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+.submit_btn:hover {
+    background-color: #45a049;
+}
+
+.user_name {
+    background: linear-gradient(to right, #ff0000, #ffd700); /* Красно-золотой градиент */
+    -webkit-background-clip: text; /* Применение градиента к тексту */
+    -webkit-text-fill-color: transparent; /* Прозрачный текст для отображения градиента */
+}
+
+.coin_png{
+    width: 20px;
+    height: 20px;
+}
+
+.prediction_btn{
+    height: 40px;
+    width: 150px;
+    margin-left: 15px;
+    margin-right: 10px;
+    background-color: rgb(67, 138, 179);
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.logout_wrapper {
+    display: flex; /* Используем flexbox для выравнивания */
+    justify-content: space-between; /* Распределяем пространство между элементами */
+    align-items: center; /* Выравниваем элементы по вертикали */
+    margin-bottom: 10px; /* Добавляем отступ снизу */
+}
+
+.log_out_btn {
+    background-color: #ff6347; /* Цвет фона кнопки */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s; /* Плавное изменение цвета при наведении */
+}
+
+.log_out_btn:hover {
+    background-color: #ff7f50; /* Цвет фона при наведении */
+}
