@@ -171,11 +171,13 @@ function prediction()
         body: JSON.stringify(data)
     })
     .then(response => {
-        if (response.status == 401) {
+        if (response.status === 401) {
             window.location.replace(FRONT_URL + "log_in.html");
         } else {
-            alert("Your request was sent for processing. As soon as it is ready it will appear in the history table");
             window.location.reload();
         }
-    });
+        if (response.status === 400){
+            alert("You don't have enough coins");
+        }
+    })
 }
