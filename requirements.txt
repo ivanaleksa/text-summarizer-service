@@ -10,3 +10,5 @@ uvicorn
 pyjwt
 aiogram
 pika
+pytest
+httpx
