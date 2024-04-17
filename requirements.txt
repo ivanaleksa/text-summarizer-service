@@ -5,3 +5,10 @@ torchaudio
 pydentic
 sqlalchemy
 psycopg2
+fastapi
+uvicorn
+pyjwt
+aiogram
+pika
+pytest
+httpx

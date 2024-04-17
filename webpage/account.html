@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <script src="main.js"></script>
+    <title>Account</title>
+</head>
+<body>
+    <div class="unentered">
+        <div>
+            <button class="log_out_btn" onclick="logout();">Log out</button>
+        </div>
+        <h1><p>Hello, <b class="user_name"><span id="user_login"></span></b></p></h1>
+        <p>Your balance: <b><span id="user_balance"></span></b> <img src="media/coin.png" class="coin_png"></p>
+        <div>
+            <label for="increase"></label>
+            <input type="text" id="increase" name="increase" style="margin-bottom: 10px;" />
+            <button onclick="increase_balance();">Increase balance</button>
+        </div>
+        <div class="prediction_area">
+            <label for="prediction_text"></label>
+            <textarea type="text" id="prediction_text" name="prediction_text" placeholder="Ваш запрос" style="margin-left: 5px;"></textarea>
+
+            <div style="display: flex; flex-direction: column;">
+                <button onclick="prediction();" class="prediction_btn">Prediction</button>
+                <label for="min_len">min len:</label>
+                <input type="text" id="min_len" name="min_len" style="margin-bottom: 5px; margin-left: 5px; margin-right: 5px;" />
+                <label for="max_len">max len:</label>
+                <input type="text" id="max_len" name="max_len" style="margin-bottom: 5px; margin-left: 5px; margin-right: 5px;" />
+            </div>
+        </div>
+        <div id="transaction_history" style="margin-left: 5px; margin-right: 5px;"></div>
+        <script>personal_account()</script>
+    </div>
+</body>
+</html>
