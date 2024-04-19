@@ -1,0 +1,4 @@
+# Используем официальный образ PostgreSQL
+FROM postgres:latest
+
+CMD ["postgres"]
