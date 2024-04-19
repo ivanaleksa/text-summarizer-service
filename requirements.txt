@@ -4,11 +4,12 @@ torchvision
 torchaudio
 pydentic
 sqlalchemy
-psycopg2
+psycopg2-binary
 fastapi
 uvicorn
 pyjwt
 aiogram
 pika
+aio_pika
 pytest
 httpx
